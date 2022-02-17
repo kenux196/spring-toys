@@ -1,7 +1,7 @@
 # spring-toys
 | 스프링 공부 및 연습, 가지고 놀기의 흔적 남기기
 
-## Spring 핵심 원리 - core
+## Spring 핵심 원리 - [core](http://gitlab.a2tec.co.kr/skyun/spring-toys/-/tree/main/core)
 * 객체 지향 설계와 스프링
 * 스프링 핵심 원리의 이해
 * 스프링 컨테이너와 스프링 빈(Bean)
@@ -11,7 +11,7 @@
 * 빈(Bean) 생명주기 콜백
 * 빈(Bean) 스코프(scope)
 
-## Sprng MVC 1
+## Sprng MVC 1 - [servlet](http://gitlab.a2tec.co.kr/skyun/spring-toys/-/tree/main/servlet)
 * 서블릿
 * 서블릿, JSP, MVC 패턴
 * MVC 프레임워크 만들기
