@@ -2,17 +2,15 @@ package me.kenux.itemservice.domain.item;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ItemRepositoryTest {
 
-//    @Autowired
-    private ItemRepository itemRepository = new ItemRepository();
+    //    @Autowired
+    private final ItemRepository itemRepository = new ItemRepository();
 
     @AfterEach
     void afterEach() {
