@@ -1,4 +1,4 @@
-package me.kenux.springsecurity.controller;
+package me.kenux.springsecurity.web;
 
 import me.kenux.springsecurity.domain.Member;
 import org.springframework.http.ResponseEntity;

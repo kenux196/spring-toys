@@ -3,3 +3,8 @@ spring:
   security:
     user:
       password: password
+
+logging:
+  level:
+    root: info
+    me.kenux.springsecurity: debug
