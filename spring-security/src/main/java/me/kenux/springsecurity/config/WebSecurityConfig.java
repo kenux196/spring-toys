@@ -75,13 +75,15 @@ public class WebSecurityConfig
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests(authorize -> authorize
-                        .antMatchers("/resources/**", "/login").permitAll()
-                        .antMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/hello", true))
+                            .antMatchers("/resources/**", "/login").permitAll()
+                            .antMatchers("/admin/**").hasRole("ADMIN")
+                            .antMatchers("/books/**").hasRole("ADMIN")
+                            .anyRequest().authenticated())
+                    .formLogin(login -> login
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/main", true))
+//                    .formLogin()
+//                    .logout(logout -> logout.logoutSuccessUrl("/login"))
             ;
         }
     }

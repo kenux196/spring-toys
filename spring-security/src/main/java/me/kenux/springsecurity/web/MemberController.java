@@ -1,6 +1,6 @@
 package me.kenux.springsecurity.web;
 
-import me.kenux.springsecurity.domain.Member;
+import me.kenux.springsecurity.domain.member.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package me.kenux.springsecurity.domain;
+package me.kenux.springsecurity.domain.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

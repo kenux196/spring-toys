@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book List</title>
+</head>
+<body>
+<h1>Book List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작가</th>
+    <th>가격</th>
+    <th>수량</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="book : ${books}">
+    <td th:text="${book.id}">1</td>
+    <td th:text="${book.title}">AAA</td>
+    <td th:text="${book.author}">BBB</td>
+    <td th:text="${book.price}">1000</td>
+    <td th:text="${book.quantity}">20</td>
+  </tr>
+  </tbody>
+
+</table>
+</body>
+</html>
