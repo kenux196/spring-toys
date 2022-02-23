@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -82,6 +83,14 @@ class MessageServiceTest {
         final String message = messageService.getMessage();
         System.out.println("message = " + message);
         assertThat(message).contains("kenux");
+    }
+
+    @Test
+    @WithMockAdmin
+    void getMessageWithMockAdmin() {
+        final String message = messageService.getMessage();
+        System.out.println("message = " + message);
+        assertThat(message).contains("super");
     }
 
 }
