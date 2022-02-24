@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,6 +20,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Slf4j
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig
 //        extends WebSecurityConfigurerAdapter
 {
@@ -34,16 +36,16 @@ public class WebSecurityConfig
         final String password = passwordEncoder().encode("1234");
         log.debug("===== password = {}", password);
 
-        UserDetails user1 = User.withUsername("user")
+        UserDetails user1 = User.withUsername("manager")
                 .password(password)
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
         UserDetails user2 = User.withUsername("kenux")
                 .password(password)
                 .roles("USER")
                 .build();
         UserDetails admin = User.withUsername("admin")
-                .password("1234")
+                .password(password)
                 .roles("USER", "ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user1, user2, admin);
@@ -62,6 +64,8 @@ public class WebSecurityConfig
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .antMatcher("/api/**")
+                    .authorizeRequests(authorize -> authorize
+                            .antMatchers("/api/login").permitAll())
                     .authorizeRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
                     .httpBasic()
             ;
@@ -74,10 +78,11 @@ public class WebSecurityConfig
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    .csrf().disable()
                     .authorizeRequests(authorize -> authorize
                             .antMatchers("/resources/**", "/login").permitAll()
                             .antMatchers("/admin/**").hasRole("ADMIN")
-                            .antMatchers("/books/**").hasRole("ADMIN")
+//                            .antMatchers("/books/**").hasRole("ADMIN")
                             .anyRequest().authenticated())
                     .formLogin(login -> login
                             .loginPage("/login")

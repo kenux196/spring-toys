@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Book List</title>
+</head>
+<body>
+<h1>Book List</h1>
+<div>
+  번호: <input type="text" th:value="${book.id}" readonly/></br>
+  제목: <input type="text" th:value="${book.title}" readonly/></br>
+  작가: <input type="text" th:value="${book.author}" readonly/></br>
+  가격: <input type="text" th:value="${book.price}" readonly/></br>
+  수량: <input type="text" th:value="${book.quantity}" readonly/></br>
+</div>
+</body>
+</html>

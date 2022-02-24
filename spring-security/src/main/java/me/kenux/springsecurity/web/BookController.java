@@ -6,9 +6,13 @@ import me.kenux.springsecurity.domain.book.Book;
 import me.kenux.springsecurity.domain.book.BookRepository;
 import me.kenux.springsecurity.domain.book.BookService;
 import me.kenux.springsecurity.web.dto.BookResponse;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
@@ -35,5 +39,15 @@ public class BookController {
         List<BookResponse> books = bookService.getAllBooks();
         model.addAttribute("books", books);
         return "books";
+    }
+
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostAuthorize("hasRole('ROLE_ADMIN')")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/{bookId}")
+    public String getBook(@PathVariable Long bookId, Model model) {
+        BookResponse bookResponse = bookService.getBook(bookId);
+        model.addAttribute("book", bookResponse);
+        return "book";
     }
 }

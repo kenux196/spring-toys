@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>메인 페이지</title>
+  <meta charset="UTF-8">
+  <title>메인 페이지</title>
 </head>
 <body>
 <h1 th:text="|안녕하세요. ${user.name} 님, 정상 로그인 되었습니다.|">안녕하세요. 로그인 되었습니다.</h1>
@@ -10,10 +10,12 @@
   <h3 th:text="|당신은 ${user.role} 권한이 있습니다.|">당신은 게스트 권한입니다.</h3>
 </div>
 <div>
-  <a href="/books">북리스트(admin 권한만 접근 가능함)</a>
+  <a href="/books">북리스트(admin, user 모두 가능)</a>
+  <a href="/books/1">1번책 정보 요청(admin 권한만 접근 가능함)</a>
+  <a href="/books/2">2번책 정보 요청(admin 권한만 접근 가능함)</a>
 </div>
 <div>
-<button type="submit" onclick="location.href='/logout'">로그아웃</button>
+  <button type="submit" onclick="location.href='/logout'">로그아웃</button>
 </div>
 </body>
 </html>

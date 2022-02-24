@@ -21,4 +21,9 @@ public class BookService {
                 .map(BookResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public BookResponse getBook(Long bookId) {
+        final Book book = bookRepository.findById(bookId);
+        return BookResponse.of(book);
+    }
 }
