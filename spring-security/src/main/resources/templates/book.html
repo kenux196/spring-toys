@@ -2,16 +2,51 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Book List</title>
+  <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 560px;
+    }
+  </style>
+  <title>Book Detail</title>
 </head>
 <body>
-<h1>Book List</h1>
-<div>
-  번호: <input type="text" th:value="${book.id}" readonly/></br>
-  제목: <input type="text" th:value="${book.title}" readonly/></br>
-  작가: <input type="text" th:value="${book.author}" readonly/></br>
-  가격: <input type="text" th:value="${book.price}" readonly/></br>
-  수량: <input type="text" th:value="${book.quantity}" readonly/></br>
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>도서 상세 내용</h2>
+  </div>
+  <h2 th:if="${param.status}" th:text="'저장완료!!!'"></h2>
+  <div>
+    <label for="bookId">도서 번호</label>
+    <input type="text" id="bookId" name="bookId" class="form-control" th:value="${book.id}" value="1" readonly/>
+  </div>
+  <div>
+    <label for="bookTitle">제목</label>
+    <input type="text" id="bookTitle" name="bookTitle" class="form-control" th:value="${book.title}" value="제목입니다."
+           readonly/>
+  </div>
+  <div>
+    <label for="bookAuthor">작가</label>
+    <input type="text" id="bookAuthor" name="bookAuthor" class="form-control" th:value="${book.author}" value="김작가"
+           readonly/>
+  </div>
+  <div>
+    <label for="bookPrice">가격</label>
+    <input type="text" id="bookPrice" name="bookPrice" class="form-control" th:value="|${book.price} 원|" value="1000원"
+           readonly/>
+  </div>
+  <div>
+    <label for="bookQuantity">수량</label>
+    <input type="text" id="bookQuantity" name="bookQuantity" class="form-control" th:value="${book.quantity}"
+           value="100" readonly/>
+  </div>
+  <hr class="my-4">
+  <div class="col">
+    <button class="w-100 btn btn-secondary btn-lg"
+            onclick="location.href='books.html'"
+            th:onclick="|location.href='@{/books}'|" type="button">목록으로
+    </button>
+  </div>
 </div>
 </body>
 </html>

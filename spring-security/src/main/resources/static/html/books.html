@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
   <title>Book List</title>
 </head>
 <body>
@@ -38,7 +38,7 @@
         <a href="book.html" th:href="@{/books/{bookId}(bookId=${book.id})}" th:text="${book.id}">Book Id</a>
       </td>
       <td>
-        <a href="book.html" th:href="@{/books/{bookId}(bookId=${book.id})}" th:text="${book.title}">Book Title</a>
+        <a href="book.html" th:href="@{/books/{bookId}(bookId=${book.title})}" th:text="${book.title}">Book Title</a>
       </td>
       <td th:text="${book.author}">Book Author</td>
       <td th:text="${book.price}">1000</td>

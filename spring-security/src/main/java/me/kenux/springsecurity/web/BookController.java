@@ -61,7 +61,7 @@ public class BookController {
 
     @GetMapping("/add")
     public String addBookPage() {
-        return "addBook";
+        return "addBookForm";
     }
 
     @PostMapping("/add")
