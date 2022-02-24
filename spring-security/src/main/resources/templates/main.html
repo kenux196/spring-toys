@@ -9,11 +9,26 @@
 <div>
   <h3 th:text="|당신은 ${user.role} 권한이 있습니다.|">당신은 게스트 권한입니다.</h3>
 </div>
-<div>
-  <a href="/books">북리스트(admin, user 모두 가능)</a>
-  <a href="/books/1">1번책 정보 요청(admin 권한만 접근 가능함)</a>
-  <a href="/books/2">2번책 정보 요청(admin 권한만 접근 가능함)</a>
-</div>
+<ul>
+  <li>
+    <a href="/books">북리스트(admin, user 모두 가능)</a>
+  </li>
+  <li>
+    <a href="/books/1">1번책 정보 요청(admin 권한만 접근 가능함)</a>
+  </li>
+  <li>
+    <a href="/books/2">2번책 정보 요청(admin 권한만 접근 가능함)</a>
+  </li>
+  <li>
+    <a href="/books/add">책 추가(admin 권한만 접근 가능함)</a>
+  </li>
+  <li>
+    <a href="/books/edit">책 수정(admin 권한만 접근 가능함)</a>
+  </li>
+  <li>
+    <a href="/books/delete">책 삭제(admin 권한만 접근 가능함)</a>
+  </li>
+</ul>
 <div>
   <button type="submit" onclick="location.href='/logout'">로그아웃</button>
 </div>

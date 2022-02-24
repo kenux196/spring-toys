@@ -1,14 +1,14 @@
 package me.kenux.springsecurity.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -21,9 +21,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Slf4j
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class WebSecurityConfig
-//        extends WebSecurityConfigurerAdapter
-{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -57,57 +55,35 @@ public class WebSecurityConfig
         return new DefaultAuthenticationEventPublisher(applicationEventPublisher);
     }
 
-    @Configuration
-//    @Order(1)
-    public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/api/**")
-                    .authorizeRequests(authorize -> authorize
-                            .antMatchers("/api/login").permitAll())
-                    .authorizeRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
-                    .httpBasic()
-            ;
-        }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // js, css, image 파일 등 보안 필터 적용이 필요없는 리소스 설정
+        web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
-    @Configuration
-    @Order(1)
-    public static class FormLoginWebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .csrf().disable()
-                    .authorizeRequests(authorize -> authorize
-                            .antMatchers("/resources/**", "/login").permitAll()
-                            .antMatchers("/admin/**").hasRole("ADMIN")
-//                            .antMatchers("/books/**").hasRole("ADMIN")
-                            .anyRequest().permitAll())
-                    .formLogin(login -> login
-                            .loginPage("/login")
-                            .defaultSuccessUrl("/main", true))
-//                    .formLogin()
-//                    .logout(logout -> logout.logoutSuccessUrl("/login"))
-            ;
-        }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // 인가 정책
+        http
+//                    .authorizeRequests()
+//                    .anyRequest().permitAll()
+                .authorizeRequests(authorize -> authorize
+                        .antMatchers("/resources/**", "/login", "/logout").permitAll()
+                        .antMatchers("/admin/**").hasRole("ADMIN")
+                        .antMatchers("/books/add").hasRole("ADMIN")
+                        .antMatchers("/books/edit").hasRole("ADMIN")
+                        .antMatchers("/books/delete").hasRole("ADMIN")
+                        .antMatchers("/main").authenticated()
+                        .anyRequest().permitAll())
+        ;
+
+        // 인증 정책
+        http
+                .csrf().disable()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/main", true)
+        ;
     }
-
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .authorizeRequests(authorize -> authorize
-//                        .antMatchers("/resources/**", "/login").permitAll()
-//                        .antMatchers("/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
-//                .formLogin(login -> login
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/login")
-//                        .defaultSuccessUrl("/hello", true))
-//        ;
-//
-//    }
-
 }

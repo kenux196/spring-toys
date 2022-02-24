@@ -25,7 +25,9 @@
     <td th:text="${book.quantity}">20</td>
   </tr>
   </tbody>
-
+  <div th:if="${role}">
+    <button type="submit" onclick="location.href='/books/add'">추가하기</button>
+  </div>
 </table>
 </body>
 </html>
