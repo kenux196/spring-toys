@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jre-alpine
+FROM adoptopenjdk:11-jre-hotspot
 ENV APP_HOME=/user/app
 WORKDIR $APP_HOME
 COPY build/libs/*.jar app.jar
