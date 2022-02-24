@@ -83,7 +83,7 @@ public class WebSecurityConfig
                             .antMatchers("/resources/**", "/login").permitAll()
                             .antMatchers("/admin/**").hasRole("ADMIN")
 //                            .antMatchers("/books/**").hasRole("ADMIN")
-                            .anyRequest().authenticated())
+                            .anyRequest().permitAll())
                     .formLogin(login -> login
                             .loginPage("/login")
                             .defaultSuccessUrl("/main", true))
