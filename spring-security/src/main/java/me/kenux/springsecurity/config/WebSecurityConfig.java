@@ -74,16 +74,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/books/add").hasRole("ADMIN")
                         .antMatchers("/books/edit").hasRole("ADMIN")
                         .antMatchers("/books/delete").hasRole("ADMIN")
-                        .antMatchers("/main").authenticated()
-                        .anyRequest().permitAll())
+                        .antMatchers("/api/**").permitAll()
+                        .anyRequest().authenticated())
         ;
 
         // 인증 정책
         http
                 .csrf().disable()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/main", true)
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/main", true)
         ;
     }
 }

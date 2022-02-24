@@ -32,7 +32,7 @@ public class LoginController {
         return "redirect:main";
     }
 
-    @GetMapping("/main")
+    @GetMapping("/")
     public String welcome(Authentication authentication, Model model) {
         System.out.println("LoginController.welcome");
 
@@ -46,6 +46,6 @@ public class LoginController {
         final String message = messageService.getMessage();
         log.debug("message = {}", message);
 
-        return "main";
+        return "index";
     }
 }

@@ -51,7 +51,7 @@ public class BookController {
 
     //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @PostAuthorize("hasRole('ROLE_ADMIN')")
-    @Secured("ROLE_ADMIN")
+//    @Secured("ROLE_ADMIN")
     @GetMapping("/{bookId}")
     public String getBook(@PathVariable Long bookId, Model model) {
         BookResponse bookResponse = bookService.getBook(bookId);
