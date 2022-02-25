@@ -1,11 +1,13 @@
 package me.kenux.springsecurity.config;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kenux.springsecurity.domain.member.MemberService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,37 +25,48 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    private final MemberService memberService;
+
+//    public WebSecurityConfig(MemberService memberService) {
+//        this.memberService = memberService;
+//    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         log.debug("Create PasswordEncoder bean");
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        final String password = passwordEncoder().encode("1234");
-        log.debug("===== password = {}", password);
-
-        UserDetails user1 = User.withUsername("manager")
-                .password(password)
-                .roles("ADMIN")
-                .build();
-        UserDetails user2 = User.withUsername("kenux")
-                .password(password)
-                .roles("USER")
-                .build();
-        UserDetails admin = User.withUsername("admin")
-                .password(password)
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1, user2, admin);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        final String password = passwordEncoder().encode("1234");
+//        log.debug("===== password = {}", password);
+//
+//        UserDetails user1 = User.withUsername("manager")
+//                .password(password)
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails user2 = User.withUsername("kenux")
+//                .password(password)
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.withUsername("admin")
+//                .password(password)
+//                .roles("USER", "ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1, user2, admin);
+//    }
 
     @Bean
     public AuthenticationEventPublisher authenticationEventPublisher(
             ApplicationEventPublisher applicationEventPublisher) {
         return new DefaultAuthenticationEventPublisher(applicationEventPublisher);
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+//    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -66,24 +79,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 인가 정책
         http
-//                    .authorizeRequests()
-//                    .anyRequest().permitAll()
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/resources/**", "/login", "/logout").permitAll()
-                        .antMatchers("/admin/**").hasRole("ADMIN")
-                        .antMatchers("/books/add").hasRole("ADMIN")
-                        .antMatchers("/books/edit").hasRole("ADMIN")
-                        .antMatchers("/books/delete").hasRole("ADMIN")
-                        .antMatchers("/api/**").permitAll()
+//                        .antMatchers("/admin/**").hasRole("ADMIN")
+//                        .antMatchers("/books/add").hasRole("ADMIN")
+//                        .antMatchers("/books/edit").hasRole("ADMIN")
+//                        .antMatchers("/books/delete").hasRole("ADMIN")
+//                        .antMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())
         ;
 
         // 인증 정책
         http
                 .csrf().disable()
-                .formLogin()
+//                .formLogin()
 //                .loginPage("/login")
-//                .defaultSuccessUrl("/main", true)
+//                .defaultSuccessUrl("/")
+//                .failureUrl("/login?error=true")
+                .formLogin(config -> config
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureForwardUrl("/login?error=true"))
         ;
     }
 }

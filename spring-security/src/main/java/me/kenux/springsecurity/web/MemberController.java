@@ -15,7 +15,7 @@ public class MemberController {
     @GetMapping("/members")
     public ResponseEntity<?> members(Authentication authentication) {
         System.out.println("authentication.getName() = " + authentication.getName());
-        final Member userA = new Member("userA", 20);
+        final Member userA = new Member("userA", "password");
         userA.setId(1L);
         final List<Member> members = List.of(userA);
         return ResponseEntity.ok(members);
