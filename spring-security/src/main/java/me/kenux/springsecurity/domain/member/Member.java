@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter @Getter
@@ -18,13 +20,21 @@ public class Member implements UserDetails {
 
     private String password;
 
-    private Set<Authority> authorities;
+    private Role role;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
-    public Member(String name, String password) {
+    public Member(String name, String password, Role role) {
         this.name = name;
         this.password = password;
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(role.getValue()));
+        return authorities;
     }
 
     @Override

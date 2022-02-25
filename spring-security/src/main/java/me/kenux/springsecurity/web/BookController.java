@@ -53,8 +53,9 @@ public class BookController {
         return "book";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/add")
-    public String addBookPage() {
+    public String addBookForm() {
         return "addBookForm";
     }
 
@@ -66,5 +67,17 @@ public class BookController {
     public String addBook(BookAddRequest bookAddRequest) {
         bookService.addBook(bookAddRequest.toEntity());
         return "redirect:/books";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/edit")
+    public String editBookForm() {
+        return "addBookForm";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/delete")
+    public String deleteBook() {
+        return "addBookForm";
     }
 }

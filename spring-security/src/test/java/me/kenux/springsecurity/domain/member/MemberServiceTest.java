@@ -25,7 +25,7 @@ class MemberServiceTest {
     @Test
     void save() {
         // given
-        final Member member = new Member("user1", "password");
+        final Member member = new Member("user1", "password", Role.USER);
 
         // when
         final Member save = memberRepository.save(member);
@@ -40,7 +40,7 @@ class MemberServiceTest {
     @DisplayName("멤버 아이디는 중복이 되면 안된다.")
     void test_member_must_not_be_duplicated() throws Exception {
         // given
-        final Member member = new Member("user1", "password");
+        final Member member = new Member("user1", "password", Role.USER);
         final Member save = memberRepository.save(member);
         save.setName("test");
 

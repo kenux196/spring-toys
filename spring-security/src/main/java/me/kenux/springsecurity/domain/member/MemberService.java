@@ -8,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +19,8 @@ public class MemberService implements UserDetailsService {
 
     @PostConstruct
     public void init() {
-        final Member testMember = new Member("kenux", "1234");
-        testMember.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
-        save(testMember);
+        save(new Member("kenux", "1234", Role.USER));
+        save(new Member("admin", "1234", Role.ADMIN));
     }
 
     public Member save(Member member) {
@@ -40,19 +37,7 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final Optional<Member> member = memberRepository.findByUsername(username);
-        return member.orElseThrow(() -> new UsernameNotFoundException("사용자 정보를 찾을 수 없습니다."));
-    }
-
-    public void addAuthority(Long memberId, String authority) {
-        final Member member = findMember(memberId);
-        member.getAuthorities().add(new Authority(authority));
-        memberRepository.save(member);
-    }
-
-    public void removeAuthority(Long memberId, String authority) {
-        final Member member = findMember(memberId);
-        member.getAuthorities().remove(new Authority(authority));
-        memberRepository.save(member);
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자 정보를 찾을 수 없습니다."));
     }
 }

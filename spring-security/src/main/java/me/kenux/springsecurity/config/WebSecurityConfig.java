@@ -25,12 +25,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private final MemberService memberService;
-
-//    public WebSecurityConfig(MemberService memberService) {
-//        this.memberService = memberService;
-//    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         log.debug("Create PasswordEncoder bean");
@@ -57,17 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new InMemoryUserDetailsManager(user1, user2, admin);
 //    }
 
-    @Bean
-    public AuthenticationEventPublisher authenticationEventPublisher(
-            ApplicationEventPublisher applicationEventPublisher) {
-        return new DefaultAuthenticationEventPublisher(applicationEventPublisher);
-    }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
-//    }
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         // js, css, image 파일 등 보안 필터 적용이 필요없는 리소스 설정
@@ -92,10 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 인증 정책
         http
                 .csrf().disable()
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login?error=true")
                 .formLogin(config -> config
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
