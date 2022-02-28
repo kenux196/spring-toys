@@ -15,7 +15,8 @@
 * 서블릿
 * 서블릿, JSP, MVC 패턴
 * MVC 프레임워크 만들기
-* 스프링 MVC - 구조 이해
+* 스프링 MVC - 구조 이해 
+  * [스프링 MVC 구조 그림](http://gitlab.a2tec.co.kr/skyun/spring-toys/-/wikis/Spring-MVC-%EA%B5%AC%EC%A1%B0)
 * 스프링 MVC - 기본 기능
 * 스프링 MVC - 웹페이지 만들기
 
