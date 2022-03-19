@@ -4,5 +4,5 @@ server:
       enabled: false
     include-binding-errors: on_param
     include-exception: true
-    include-message: on_param
+    include-message: always
     include-stacktrace: on_param

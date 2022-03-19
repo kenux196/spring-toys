@@ -3,6 +3,7 @@ package me.kenux.exception;
 import me.kenux.exception.filter.LogFilter;
 import me.kenux.exception.interceptor.LogInterceptor;
 import me.kenux.exception.resolver.MyHandlerExceptionResolver;
+import me.kenux.exception.resolver.UserHandlerExceptionResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,5 +39,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
         resolvers.add(new MyHandlerExceptionResolver());
+        resolvers.add(new UserHandlerExceptionResolver());
     }
 }
