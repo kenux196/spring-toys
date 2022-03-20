@@ -6,8 +6,8 @@
 </head>
 <body>
 <form th:object="${form}" th:method="post">
-  th:field <input type="text" th:field="*{ipPort}"><br/>
-  th:value <input type="text" th:value="*{ipPort}">(보여주기 용도)<br/>
+  number <input type="text" th:field="*{number}"><br>
+  localDateTime <input type="text" th:field="*{localDateTime}"><br>
   <input type="submit">
 </form>
 
