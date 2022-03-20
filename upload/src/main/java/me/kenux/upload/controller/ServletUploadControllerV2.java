@@ -53,9 +53,7 @@ public class ServletUploadControllerV2 {
             log.info("size={}", part.getSize()); // part body size
 
             // 데이터 읽기
-            InputStream inputStream = part.getInputStream();
-            String body = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-            log.info("body={}", body);
+//            readPartBodyData(part);
 
             // 파일에 저장하기
             if (StringUtils.hasText(part.getSubmittedFileName())) {
@@ -66,7 +64,12 @@ public class ServletUploadControllerV2 {
 
         }
 
-
         return "upload-form";
+    }
+
+    private void readPartBodyData(Part part) throws IOException {
+        InputStream inputStream = part.getInputStream();
+        String body = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        log.info("body={}", body);
     }
 }
