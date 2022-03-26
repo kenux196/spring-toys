@@ -60,8 +60,12 @@ public class ItemController {
         return "items/updateItemForm";
     }
 
-    @PostMapping("/items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm form) {
+//    @PostMapping("/items/{itemId}/edit")
+    public String updateItemV1(@ModelAttribute("form") BookForm form) {
+        // 준영속 상태의 엔티티를 가지고 병합을 하고 있다.
+        // 이 경우에는 엔티티의 변경된 부부만 아니라 전체가 변경된다.
+        // 필드 중에 null로 채워지면  null 자체가 저장이 된다.
+        // 실무에서는 변경 감지를 사용하는 것이 좋다.
         Book book = new Book();
         book.setId(form.getId());
         book.setName(form.getName());
@@ -71,6 +75,13 @@ public class ItemController {
         book.setIsbn(form.getIsbn());
 
         itemService.saveItem(book);
+        return "redirect:/items";
+    }
+
+    @PostMapping("/items/{itemId}/edit")
+    public String updateItemV2(@ModelAttribute("form") BookForm form) {
+        // 변경 감지를 사용한 버전
+        itemService.updateItem(form);
         return "redirect:/items";
     }
 }
