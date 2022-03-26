@@ -1,22 +1,23 @@
-package me.kenux.advanced.app.v2.v1;
+package me.kenux.advanced.app.v3;
 
 import lombok.RequiredArgsConstructor;
 import me.kenux.advanced.trace.TraceId;
 import me.kenux.advanced.trace.TraceStatus;
 import me.kenux.advanced.trace.hellotrace.HelloTraceV2;
+import me.kenux.advanced.trace.logtrace.LogTrace;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepositoryV2 {
+public class OrderRepositoryV3 {
 
-    private final HelloTraceV2 trace;
+    private final LogTrace trace;
 
-    public void save(TraceId traceId, String itemId) {
+    public void save(String itemId) {
         TraceStatus status = null;
 
         try {
-            status = trace.beginSync(traceId, "OrderRepository.save()");
+            status = trace.begin("OrderRepository.save()");
             // 저장 로직
             if (itemId.equals("ex")) {
                 throw new IllegalStateException("예외 발생");
@@ -30,9 +31,9 @@ public class OrderRepositoryV2 {
         }
     }
 
-    private void sleep(int millis) {
+    private void sleep(int ms) {
         try {
-            Thread.sleep(millis);
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

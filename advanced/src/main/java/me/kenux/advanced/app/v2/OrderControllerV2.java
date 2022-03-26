@@ -1,4 +1,4 @@
-package me.kenux.advanced.app.v2.v1;
+package me.kenux.advanced.app.v2;
 
 import lombok.RequiredArgsConstructor;
 import me.kenux.advanced.trace.TraceStatus;
