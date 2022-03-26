@@ -12,7 +12,7 @@ public class OrderRepositoryV0 {
         if (itemId.equals("ex")) {
             throw new IllegalStateException("예외 발생");
         }
-        sleep(100);
+        sleep(1000);
     }
 
     private void sleep(int millis) {
