@@ -12,7 +12,9 @@ import javax.persistence.*;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // batch insert 동작하지 않는다.
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE) // batch insert 동작한다.
+//    @GeneratedValue(strategy = GenerationType.TABLE) // 성능 가장 안좋다
     private Long id;
 
     private String name;

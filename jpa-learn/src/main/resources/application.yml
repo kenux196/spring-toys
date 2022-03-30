@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    properties:
+      hiberante:
+        default_batch_size: 1000
+        order_inserts: true
+        order_updates: true
+  datasource:
+    hikari:
+      data-source-properties:
+        rewirteBatchStatements: true

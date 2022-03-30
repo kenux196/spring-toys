@@ -30,7 +30,7 @@ class MemberRepositoryTest {
         Member savedMember = memberRepository.save(member);
 
         // then
-        assertThat(savedMember.getId()).isEqualTo(1L);
+        assertThat(savedMember.getId()).isEqualTo(member.getId());
     }
 
     @Test
