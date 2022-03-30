@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@ToString(exclude = "team")
 public class Member {
 
     @Id
@@ -25,11 +25,19 @@ public class Member {
 
     private Integer age;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
     @Builder
     public Member(String name, String phone, String address, Integer age) {
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.age = age;
+    }
+
+    public void changeTeam(Team team) {
+        this.team = team;
     }
 }

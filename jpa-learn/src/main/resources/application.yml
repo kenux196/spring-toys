@@ -2,10 +2,17 @@ spring:
   jpa:
     properties:
       hiberante:
+        format_sql: true
         default_batch_size: 1000
         order_inserts: true
         order_updates: true
+    show-sql: true
   datasource:
     hikari:
       data-source-properties:
         rewirteBatchStatements: true
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+      multiline: false
