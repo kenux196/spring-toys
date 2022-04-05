@@ -1,12 +1,14 @@
 spring:
   jpa:
+    show-sql: false
     properties:
       hiberante:
+        show_sql: false
         format_sql: false
         default_batch_size: 1000
         order_inserts: true
         order_updates: true
-      show-sql: false
+
   datasource:
     hikari:
       data-source-properties:
@@ -16,3 +18,7 @@ decorator:
     p6spy:
       enable-logging: false
       multiline: false
+
+#logging:
+#  level:
+#    org.hibernate.type.descriptor.sql: trace
