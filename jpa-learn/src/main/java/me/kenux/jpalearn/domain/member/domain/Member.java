@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "member")
+@Table(name = "member", uniqueConstraints = {@UniqueConstraint(name = "member_id_pk", columnNames = {"id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString(exclude = "team")
@@ -15,6 +15,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // batch insert 동작하지 않는다.
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE) // batch insert 동작한다.
 //    @GeneratedValue(strategy = GenerationType.TABLE) // 성능 가장 안좋다
+//    @Column(name = "id", unique = true)
     private Long id;
 
     private String name;
@@ -39,5 +40,9 @@ public class Member {
 
     public void changeTeam(Team team) {
         this.team = team;
+    }
+
+    public void changeAge(int age) {
+        this.age = age;
     }
 }

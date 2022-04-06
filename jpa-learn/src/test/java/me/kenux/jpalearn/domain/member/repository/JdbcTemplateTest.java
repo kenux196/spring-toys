@@ -43,6 +43,13 @@ class JdbcTemplateTest {
         insertUsingJpa(members);
     }
 
+    @Test
+    void constraintUpdate() {
+        insertOnConflictUsingJdbcTemplate(members);
+        members.forEach(member -> member.changeAge(10));
+        insertOnConflictUsingJdbcTemplate(members);
+    }
+
     private List<Member> createMembers(int number) {
         for (int i = 0; i < number; i++) {
             Member member = Member.builder()
@@ -89,5 +96,35 @@ class JdbcTemplateTest {
         final long endTime = System.currentTimeMillis();
         long resultTime = endTime - startTime;
         System.out.println("insert batch using JPA resultTime = " + resultTime + " ms");
+    }
+
+    private void insertOnConflictUsingJdbcTemplate(List<Member> members) {
+        String query = "" +
+                "insert into member(name, address, age, phone) values (?, ?, ?, ?) " +
+                "on conflict on constraint member_pk " +  // postgresql에 종속적인 쿼리문. h2db에서 지원하지 않는다.
+                "do update set age = excluded.age";
+
+        final long startTime = System.currentTimeMillis();
+        jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, members.get(i).getName());
+                ps.setString(2, members.get(i).getAddress());
+                ps.setInt(3, members.get(i).getAge());
+                ps.setString(4, members.get(i).getPhone());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return members.size();
+            }
+        });
+
+        final long endTime = System.currentTimeMillis();
+        long resultTime = endTime - startTime;
+        System.out.println("insert batch using JDBCTemplate resultTime = " + resultTime + " ms");
+
+        final List<Map<String, Object>> foundMember = jdbcTemplate.queryForList("select * from member where id = 1000");
+        System.out.println("foundMember = " + foundMember);
     }
 }
