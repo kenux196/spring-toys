@@ -5,8 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,15 +25,17 @@ class JdbcTemplateTest {
 
     private final List<Member> members = new ArrayList<>();
 
+    private static final int ITEM_COUNT = 100000;
+
     @BeforeEach
     void setup() {
-        createMembers(100);
+        createMembers(ITEM_COUNT);
     }
 
     @Test
     void jdbcInsertTest() {
         System.out.println("jdbcTemplate = " + jdbcTemplate);
-        insertUsingJdbcTemplate(members, 1000);
+        insertUsingJdbcTemplate(members);
     }
 
     @Test
@@ -51,15 +56,23 @@ class JdbcTemplateTest {
         return members;
     }
 
-    private void insertUsingJdbcTemplate(List<Member> members, int batchSize) {
+    private void insertUsingJdbcTemplate(List<Member> members) {
         String query = "insert into member(name, address, age, phone) values (?, ?, ?, ?)";
 
         final long startTime = System.currentTimeMillis();
-        jdbcTemplate.batchUpdate(query, members, batchSize, (ps, argument) -> {
-            ps.setString(1, argument.getName());
-            ps.setString(2, argument.getAddress());
-            ps.setInt(3, argument.getAge());
-            ps.setString(4, argument.getPhone());
+        jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, members.get(i).getName());
+                ps.setString(2, members.get(i).getAddress());
+                ps.setInt(3, members.get(i).getAge());
+                ps.setString(4, members.get(i).getPhone());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return members.size();
+            }
         });
 
         final long endTime = System.currentTimeMillis();
