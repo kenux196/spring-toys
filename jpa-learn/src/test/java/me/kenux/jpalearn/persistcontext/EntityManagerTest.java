@@ -1,5 +1,6 @@
 package me.kenux.jpalearn.persistcontext;
 
+import lombok.extern.slf4j.Slf4j;
 import me.kenux.jpalearn.config.QuerydslConfig;
 import me.kenux.jpalearn.domain.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,9 +12,14 @@ import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @DataJpaTest
 @Import(QuerydslConfig.class)
 public class EntityManagerTest {
@@ -22,6 +28,8 @@ public class EntityManagerTest {
     EntityManagerFactory emf;
 
     private EntityManager em;
+
+    private List<Member> members = new ArrayList<>();
 
     @BeforeEach
     void setup() {
@@ -138,5 +146,71 @@ public class EntityManagerTest {
         assertThat(findMember.getId()).isEqualTo(member.getId());
         System.out.println("member = " + member);
         System.out.println("findMember = " + findMember);
+    }
+
+    @Test
+    @DisplayName("dirty checking 테스트")
+    void dirtyCheckingTest() {
+        // given
+        setupTestData();
+
+        // when - 엔티티 조회 후 수정
+        em.getTransaction().begin();
+        final Member findMember = em.find(Member.class, 1L);
+        findMember.changeAge(40);
+        em.getTransaction().commit();
+    }
+
+    @Test
+    @DisplayName("JPQL 쿼리를 실행하면 flush가 즉시 일어난다.")
+    void flushByJPQL() {
+        // given
+        setUpMembers();
+
+        log.info("transaction begin");
+        em.getTransaction().begin();
+
+        members.forEach(member -> {
+            log.info("persist 호출");
+            em.persist(member);
+        });
+
+//        log.info("flush");
+//        em.flush();
+
+        log.info("jpql 실행");
+        // when
+        final TypedQuery<Member> query = em.createQuery("select m from Member m", Member.class);
+        final List<Member> memberList = query.getResultList(); // jpql 쿼리가 실해되는 순간 flush 가 발생한다.
+        // JPQL 쿼리를 실행하는 시점에서 영속성 컨텍스트에 등록한 member들이 조회가 안되는 경우를 막기 위해서
+        // JPA에서는 JPQL 쿼리를 수행하기 전에 flush 를 하여서 DB와 영속성 컨텍스트간의 동기화를 해준다.
+
+        log.info("transaction commit");
+        em.getTransaction().commit();
+
+        // then
+        assertThat(memberList).hasSize(10);
+    }
+
+    private void setupTestData() {
+        Member member = Member.builder()
+                .name("memberA")
+                .age(30)
+                .build();
+
+        em.getTransaction().begin();
+        em.persist(member);
+        em.getTransaction().commit();
+        em.clear();
+    }
+
+    private void setUpMembers() {
+        for (int i = 0; i < 10; i++) {
+            Member member = Member.builder()
+                    .name("member " + i)
+                    .age(10 + i)
+                    .build();
+            members.add(member);
+        }
     }
 }
