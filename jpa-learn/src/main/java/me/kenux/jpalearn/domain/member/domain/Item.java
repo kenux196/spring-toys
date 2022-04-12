@@ -21,6 +21,10 @@ public abstract class Item {
         this.price = price;
     }
 
+    protected Item() {
+
+    }
+
     public String getId() {
         return id;
     }
