@@ -3,6 +3,7 @@ package me.kenux.jpalearn.persistcontext;
 import lombok.extern.slf4j.Slf4j;
 import me.kenux.jpalearn.config.QuerydslConfig;
 import me.kenux.jpalearn.domain.member.domain.Member;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,28 +13,37 @@ import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 @DataJpaTest
 @Import(QuerydslConfig.class)
-public class EntityManagerTest {
+class EntityManagerTest {
 
     @Autowired
     EntityManagerFactory emf;
 
     private EntityManager em;
 
-    private List<Member> members = new ArrayList<>();
+    private final List<Member> members = new ArrayList<>();
 
     @BeforeEach
-    void setup() {
+    void beforeEach() {
+//        emf = Persistence.createEntityManagerFactory("jpaTest");
         em = emf.createEntityManager();
+    }
+
+    @AfterEach
+    void afterEach() {
+        em.close();
+//        emf.close();
     }
 
     @Test
@@ -45,14 +55,20 @@ public class EntityManagerTest {
                 .build();
 
         // when
-        em.getTransaction().begin();
-        em.persist(member);
-        em.getTransaction().commit();
-        System.out.println("member = " + member);
+        try {
+            em.getTransaction().begin();
+            em.persist(member);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            em.clear();
+        }
+        log.info("member={}", member);
 
         // then
         Member findMember = em.find(Member.class, member.getId());
-        assertThat(findMember).isEqualTo(member);
+        assertThat(findMember).isNotNull();
         assertThat(findMember.getId()).isEqualTo(member.getId());
     }
 
@@ -83,18 +99,30 @@ public class EntityManagerTest {
         em.getTransaction().begin();
         // 객체를 저장한 상태(영속)
         em.persist(member);
+        log.info("persist end member={}", System.identityHashCode(member));
 
         // 회원 엔티티를 영속성 컨텍스트에서 분리(준영속)
         em.detach(member);
+        log.info("detach end member={}", System.identityHashCode(member));
 
         // 영속 상태로 다시 merge
-        em.merge(member);
+        // 준영속 엔티티의 식별자로 1차 캐시에서 조회
+        // 없으면 db에서 조회 후 1차 캐시에 저장하여 managed 상태로 함.
+        // 따라서 새로 merge한 객체는 이전 member 객체와 동일한 객체가 아니다.
+        final Member mergedMember = em.merge(member);
+        log.info("merge end member={}", System.identityHashCode(mergedMember));
 
         // 객체를 삭제한 상태(삭제)
-        em.remove(member);
+        em.remove(mergedMember);
+        log.info("remove end member={}", System.identityHashCode(mergedMember));
+
+        // member 객체는 준영속 상태이므로 remove 불가능.
+        assertThatThrownBy(() -> em.remove(member))
+                .isInstanceOf(IllegalArgumentException.class);
+
         em.getTransaction().commit();
 
-        System.out.println("member = " + member);
+        em.clear();
     }
 
     @Test
@@ -112,12 +140,12 @@ public class EntityManagerTest {
 
         // transaction commit 시점에 insert 쿼리가 날아간다.
         em.getTransaction().commit();
-
-        System.out.println("member = " + member);
+        log.info("member={}", member);
 
         // then
         // 조회는 1차 캐시에서 조회가 되므로 쿼리가 날아가지 않는다.
         Member findMember = em.find(Member.class, member.getId());
+        em.clear();
         assertThat(findMember).isEqualTo(member);
         assertThat(findMember.getId()).isEqualTo(member.getId());
     }
@@ -144,21 +172,34 @@ public class EntityManagerTest {
         // 조회된 결과는 기존 엔티티와 같지 않다.
         assertThat(findMember).isNotEqualTo(member);
         assertThat(findMember.getId()).isEqualTo(member.getId());
-        System.out.println("member = " + member);
-        System.out.println("findMember = " + findMember);
+        log.info("member={}", System.identityHashCode(member));
+        log.info("findMember={}", System.identityHashCode(findMember));
+        em.clear();
     }
 
     @Test
     @DisplayName("dirty checking 테스트")
     void dirtyCheckingTest() {
         // given
-        setupTestData();
+        final Long memberId = createOneMember();
 
+        em = emf.createEntityManager();
         // when - 엔티티 조회 후 수정
-        em.getTransaction().begin();
-        final Member findMember = em.find(Member.class, 1L);
-        findMember.changeAge(40);
-        em.getTransaction().commit();
+        Member findMember = null;
+        try {
+            em.getTransaction().begin();
+            findMember = em.find(Member.class, memberId);
+            findMember.changeAge(40);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            em.clear();
+        }
+
+        final Member member = em.find(Member.class, memberId);
+        assertThat(member.getAge()).isEqualTo(40);
+        em.clear();
     }
 
     @Test
@@ -190,9 +231,94 @@ public class EntityManagerTest {
 
         // then
         assertThat(memberList).hasSize(10);
+        em.clear();
     }
 
-    private void setupTestData() {
+    @Test
+    @DisplayName("정상 저장이 되면, Commit 되어야 한다.")
+    void transactionSuccessTest() {
+        Member member = Member.builder()
+                .name("memberA")
+                .age(30)
+                .build();
+
+        try {
+            em.getTransaction().begin();
+            saveMemberSuccess(em, member);
+            em.getTransaction().commit();
+            log.info("정상 종료");
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            log.info("예외 발생 => 롤백");
+        } finally {
+            em.clear();
+        }
+        assertThat(em.find(Member.class, member.getId())).isNotNull();
+    }
+
+    @Test
+    @DisplayName("예외가 발생하면, 롤백되어야 한다.")
+    void transactionRollbackTest() {
+        Member member = Member.builder()
+                .name("memberA")
+                .age(30)
+                .build();
+
+        try {
+            em.getTransaction().begin();
+            saveMemberException(em, member);
+            em.getTransaction().commit();
+            log.info("정상 종료");
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            log.info("예외 발생 => 롤백");
+        } finally {
+            em.clear();
+        }
+        assertThat(em.find(Member.class, 1L)).isNull();
+    }
+
+    @Test
+    @DisplayName("여러 건의 데이터 저장 및 조회")
+    void multiDataSaveAndFind() {
+        setUpMembers();
+
+        List<Member> memberList = new ArrayList<>();
+        try {
+            em.getTransaction().begin();
+            saveAll(em);
+            memberList = findAll(em);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            em.clear();
+        }
+        assertThat(memberList).hasSize(10);
+        memberList.forEach(member -> log.info("member={}", member));
+    }
+
+    private List<Member> findAll(EntityManager em) {
+        return em.createQuery("select m from Member m", Member.class)
+                .getResultList();
+    }
+
+    private void saveAll(EntityManager em) {
+        for (Member member: members) {
+            em.persist(member);
+        }
+    }
+
+    private void saveMemberSuccess(EntityManager em, Member member) {
+        em.persist(member);
+    }
+
+    private void saveMemberException(EntityManager em, Member member) {
+        em.persist(member);
+        throw new IllegalStateException();
+    }
+
+    private Long createOneMember() {
         Member member = Member.builder()
                 .name("memberA")
                 .age(30)
@@ -202,6 +328,9 @@ public class EntityManagerTest {
         em.persist(member);
         em.getTransaction().commit();
         em.clear();
+        em.close();
+
+        return member.getId();
     }
 
     private void setUpMembers() {

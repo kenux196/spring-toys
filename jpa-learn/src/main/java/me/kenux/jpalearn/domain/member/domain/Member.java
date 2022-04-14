@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "member", uniqueConstraints = {@UniqueConstraint(name = "member_id_pk", columnNames = {"id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-//@ToString(exclude = "team")
+@ToString(exclude = "team")
 public class Member {
 
     @Id
