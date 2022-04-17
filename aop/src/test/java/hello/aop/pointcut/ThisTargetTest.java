@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 /**
- * application.properties
+ * application.yml
  * spring.aop.proxy-target-class=true CGLIB 사용
  * spring.aop.proxy-target-class=false JDK 동적 프록시 사용
  */
