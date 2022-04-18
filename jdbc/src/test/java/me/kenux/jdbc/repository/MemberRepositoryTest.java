@@ -18,7 +18,7 @@ class MemberRepositoryTest {
     @Test
     void crud() throws SQLException {
         // save
-        Member member = new Member("memberV2", 10000);
+        Member member = new Member("memberV8", 10000);
         repository.save(member);
 
         // findById
@@ -27,6 +27,17 @@ class MemberRepositoryTest {
         log.info("findMember={}", findMember);
         log.info("findMember == member : {}", findMember == member);
         log.info("findMember equals member : {}", findMember.equals(member));
+
+        // update
+        repository.update(member.getMemberId(), 20000);
+        Member updatedMember = repository.findById(member.getMemberId());
+        assertThat(updatedMember.getMoney()).isEqualTo(20000);
+        log.info("updatedMember={}", updatedMember);
+
+        // delete
+        repository.delete(member.getMemberId());
+        assertThatThrownBy(() -> repository.findById(member.getMemberId()))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
