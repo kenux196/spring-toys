@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import me.kenux.jdbc.domain.Member;
 import me.kenux.jdbc.repository.MemberRepository;
 import me.kenux.jdbc.repository.MemberRepositoryV4_1;
+import me.kenux.jdbc.repository.MemberRepositoryV4_2;
+import me.kenux.jdbc.repository.MemberRepositoryV5;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +52,9 @@ class MemberServiceV4Test {
 
         @Bean
         MemberRepository memberRepository() {
-            return new MemberRepositoryV4_1(dataSource);
+//            return new MemberRepositoryV4_1(dataSource); // 단순 예외 변환
+//            return new MemberRepositoryV4_2(dataSource); // 스프링 예외 변환
+            return new MemberRepositoryV5(dataSource); // JDBCTemplate
         }
 
         @Bean
