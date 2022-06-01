@@ -5,18 +5,18 @@ import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
 import hello.itemservice.repository.memory.MemoryItemRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest
 class ItemRepositoryTest {
 
@@ -26,13 +26,13 @@ class ItemRepositoryTest {
     @Autowired
     PlatformTransactionManager transactionManager;
 
-    private TransactionStatus status;
-
-    @BeforeEach
-    void beforeEach() {
-        // start transaction
-        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-    }
+//    private TransactionStatus status;
+//
+//    @BeforeEach
+//    void beforeEach() {
+//        // start transaction
+//        status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+//    }
 
     @AfterEach
     void afterEach() {
@@ -41,10 +41,11 @@ class ItemRepositoryTest {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
 
-        // rollback transaction
-        transactionManager.rollback(status);
+//        // rollback transaction
+//        transactionManager.rollback(status);
     }
 
+//    @Commit
     @Test
     void save() {
         //given
