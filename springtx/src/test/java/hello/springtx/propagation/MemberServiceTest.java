@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.UnexpectedRollbackException;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +21,9 @@ class MemberServiceTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    MemberRepository2 memberRepository2;
 
     @Autowired
     LogRepository logRepository;
@@ -157,5 +162,34 @@ class MemberServiceTest {
         // then: 모든 데이터가 롤백된다.
         assertTrue(memberRepository.find(username).isPresent());
         assertTrue(logRepository.find(username).isEmpty());
+    }
+
+    @Test
+    void findMemberTest() {
+        // given
+        String username = "newMember";
+        memberService.joinV2(username);
+
+        // when
+        Optional<Member> member = memberService.getMember(username);
+
+        // then
+        assertTrue(member.isPresent());
+
+    }
+
+    @Test
+    void findMember2Test() {
+        // given
+        String username = "newMember";
+        Member member = memberService.joinV2(username);
+
+        // when
+        Optional<Member> findMember = memberService.getMember2(member.getId());
+        Optional<Member> findMember2 = memberService.getMember2(member.getId());
+
+        // then
+        assertTrue(findMember.isPresent());
+
     }
 }

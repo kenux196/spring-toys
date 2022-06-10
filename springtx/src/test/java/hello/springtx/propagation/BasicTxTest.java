@@ -123,6 +123,7 @@ public class BasicTxTest {
         txManager.rollback(inner);
 
         log.info("외부 트랜잭션 커밋");
+//        txManager.commit(outer);
         assertThatThrownBy(() -> txManager.commit(outer))
                 .isInstanceOf(UnexpectedRollbackException.class);
     }
