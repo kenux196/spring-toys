@@ -6,7 +6,7 @@ import me.kenux.playground.pattern.observer.weathersystem.code.WeatherData;
 
 public class HeatIndexDisplay implements Observer, DisplayElement {
     private float heatIndex = 0f;
-    private WeatherData weatherData;
+    private final WeatherData weatherData;
 
     public HeatIndexDisplay(WeatherData weatherData) {
         this.weatherData = weatherData;
@@ -22,6 +22,11 @@ public class HeatIndexDisplay implements Observer, DisplayElement {
     public void update(float temperature, float humidity, float pressure) {
         calculateHeatIndex(temperature, humidity);
         display();
+    }
+
+    @Override
+    public void update() {
+        calculateHeatIndex(weatherData.getTemperature(), weatherData.getHumidity());
     }
 
     private void calculateHeatIndex(float t, float rh) {

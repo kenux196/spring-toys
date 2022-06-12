@@ -33,4 +33,11 @@ public class ForecastDisplay implements Observer, DisplayElement {
         currentPressure = pressure;
         display();
     }
+
+    @Override
+    public void update() {
+        this.lastPressure = currentPressure;
+        currentPressure = weatherData.getPressure();
+        display();
+    }
 }
