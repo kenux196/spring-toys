@@ -1,0 +1,8 @@
+logging:
+  level:
+#    org.springframework.jdbc.datasource.DataSourceTransactionManager: debug
+#    org.springframework.transaction.interceptor:  trace
+    org.springframework.orm.jpa.JpaTransactionManager: debug
+    org.hibernate.resource.transaction: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

@@ -29,6 +29,8 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	runtimeOnly 'com.h2database:h2'
+
 	// Querydsl
 	implementation 'com.querydsl:querydsl-jpa'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
