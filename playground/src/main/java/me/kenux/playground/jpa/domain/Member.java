@@ -15,13 +15,19 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private Integer age;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     public Member(String name, Integer age) {
         this.name = name;
         this.age = age;
+    }
+
+    public void assignTeam(Team team) {
+        this.team = team;
     }
 }

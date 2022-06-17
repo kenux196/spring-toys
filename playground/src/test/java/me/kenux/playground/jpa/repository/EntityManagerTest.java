@@ -1,15 +1,17 @@
 package me.kenux.playground.jpa.repository;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import me.kenux.playground.jpa.domain.Item;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@Slf4j
 @DataJpaTest
 class EntityManagerTest {
 
@@ -17,35 +19,36 @@ class EntityManagerTest {
     EntityManager em;
 
     @Test
-//    @Transactional
     void save() {
-        Item item = new Item("itemA", 1000);
-        em.persist(item);
+        // given
+        Item item = new Item("itemA", 1000, 10);
 
+        // when
+        em.persist(item);
         em.clear();
 
+        // then
         Item findItem = em.find(Item.class, item.getId());
+        assertThat(findItem.getId()).isEqualTo(item.getId());
         System.out.println("findItem = " + findItem);
-
     }
 
-    @Entity
-    @Table(name = "item")
-    @NoArgsConstructor
-    @Getter
-    @ToString
-    static class Item {
+    @Test
+    void findAll() {
+        // given
+        Item itemA = new Item("itemA", 1000, 10);
+        em.persist(itemA);
+        log.info("itemA 저장");
+        Item itemB = new Item("itemB", 1000, 10);
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private String name;
-        private Integer price;
+        em.persist(itemB);
+        em.clear();
 
-        public Item(String name, Integer price) {
-            this.name = name;
-            this.price = price;
-        }
+        // when
+        String query = "select i from Item i";
+        List<Item> resultList = em.createQuery(query, Item.class).getResultList();
+
+        // then
+        assertThat(resultList).hasSize(2);
     }
-
 }
