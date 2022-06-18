@@ -30,7 +30,7 @@ class EntityManagerTest {
         // then
         Item findItem = em.find(Item.class, item.getId());
         assertThat(findItem.getId()).isEqualTo(item.getId());
-        System.out.println("findItem = " + findItem);
+        log.info("findItem={}", findItem);
     }
 
     @Test
