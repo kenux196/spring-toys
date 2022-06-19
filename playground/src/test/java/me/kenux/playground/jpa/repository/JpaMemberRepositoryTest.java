@@ -1,10 +1,13 @@
 package me.kenux.playground.jpa.repository;
 
+import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -13,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@AutoConfigureTestDatabase
+@Import(QuerydslConfig.class)
 class JpaMemberRepositoryTest {
 
     @Autowired
