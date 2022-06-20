@@ -21,7 +21,13 @@ public class Item {
 
     private Integer quantity;
 
-    @Builder
+    public Item(Long id, String name, Integer price, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public Item(String name, Integer price, Integer quantity) {
         this.name = name;
         this.price = price;
