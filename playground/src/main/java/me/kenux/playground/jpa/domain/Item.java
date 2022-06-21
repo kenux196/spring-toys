@@ -13,13 +13,14 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long id;
 
     private String name;
 
     private Integer price;
 
-    private Integer quantity;
+    private Integer quantity; // 재고수량
 
     public Item(Long id, String name, Integer price, Integer quantity) {
         this.id = id;
