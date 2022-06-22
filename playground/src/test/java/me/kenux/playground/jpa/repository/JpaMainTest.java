@@ -1,30 +1,26 @@
 package me.kenux.playground.jpa.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceUnit;
 
 /**
  * JPA 기본 엔티티 메니저 팩토리 & 엔티티 매니저
  */
 @Slf4j
-@DataJpaTest
-@Import(QuerydslConfig.class)
+@SpringBootTest
 class JpaMainTest {
 
-    @Autowired
+    @PersistenceUnit
     EntityManagerFactory emf;
-
     EntityManager em;
 
     @BeforeEach

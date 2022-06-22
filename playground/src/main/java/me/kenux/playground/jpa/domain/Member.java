@@ -3,6 +3,7 @@ package me.kenux.playground.jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString(exclude = {"roleType", "description", "city", "street", "zipcode", "age", "lastModifiedDate"})
 public class Member {
 
     @Id
