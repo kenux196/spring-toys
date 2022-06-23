@@ -49,7 +49,7 @@ class JpaMainTest {
 
     private void logic() {
         log.info("비즈니스로직 수행");
-        Member member = new Member("memberA", 20);
+        Member member = new Member("memberA");
         em.persist(member);
     }
 }

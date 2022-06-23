@@ -26,7 +26,7 @@ class MemberRepositoryTest {
     @Test
     void save() {
         // given
-        Member member = new Member("memberA", 33);
+        Member member = new Member("memberA");
 
         // when
         memberRepository.save(member);
@@ -40,9 +40,9 @@ class MemberRepositoryTest {
     @DisplayName("이름에 member가 포함된 회원 검색: 성공")
     void findBySearchConditionWithName_success() {
         // given
-        Member memberA = new Member("memberA", 33);
-        Member memberB = new Member("memberB", 29);
-        Member memberC = new Member("memberC", 30);
+        Member memberA = new Member("memberA");
+        Member memberB = new Member("memberB");
+        Member memberC = new Member("memberC");
 
         memberRepository.saveAll(Arrays.asList(memberA, memberB, memberC));
 
@@ -59,10 +59,10 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("이름에 member가 포함되고 나이가 30이하인 회원 검색: 성공")
     void findBySearchCondWithNameAndAge_success() {
-// given
-        Member memberA = new Member("memberA", 33);
-        Member memberB = new Member("memberB", 29);
-        Member memberC = new Member("memberC", 30);
+        // given
+        Member memberA = new Member("memberA");
+        Member memberB = new Member("memberB");
+        Member memberC = new Member("memberC");
 
         memberRepository.saveAll(Arrays.asList(memberA, memberB, memberC));
 

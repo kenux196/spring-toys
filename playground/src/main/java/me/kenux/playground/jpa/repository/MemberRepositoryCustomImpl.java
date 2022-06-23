@@ -19,7 +19,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     public List<Member> findAllByCondition(MemberSearchCond cond) {
         return queryFactory.select(member)
                 .from(member)
-                .where(likeName(cond.getName()), lessOrEqualAge(cond.getAge()))
+                .where(likeName(cond.getName()))
                 .fetch();
     }
 
@@ -30,10 +30,10 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression lessOrEqualAge(Integer age) {
-        if (age != null) {
-            return member.age.loe(age);
-        }
-        return null;
-    }
+//    private BooleanExpression lessOrEqualAge(Integer age) {
+//        if (age != null) {
+//            return member.age.loe(age);
+//        }
+//        return null;
+//    }
 }

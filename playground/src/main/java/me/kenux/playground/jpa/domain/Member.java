@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString(exclude = {"roleType", "description", "city", "street", "zipcode", "age", "lastModifiedDate"})
+@ToString(exclude = {"roleType", "description", "city", "street", "zipcode", "lastModifiedDate"})
 public class Member {
 
     @Id
@@ -22,7 +22,6 @@ public class Member {
 
     @Column(name = "name", nullable = false, length = 10)
     private String name;
-    private Integer age;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
@@ -44,9 +43,8 @@ public class Member {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public Member(String name, Integer age) {
+    public Member(String name) {
         this.name = name;
-        this.age = age;
     }
 
     public Member(String name, String city, String street, String zipcode) {
@@ -56,7 +54,22 @@ public class Member {
         this.zipcode = zipcode;
     }
 
-    public void assignTeam(Team team) {
+    public void setTeam(Team team) {
         this.team = team;
+    }
+
+    /**
+     * 연관관계 편의 메소드
+     * 반대 편의 객체에게도 관계를 설정한다.
+     * 주의 : 팀이 변경되면, 기존 팀은 연결을 끊어줘야 한다.
+     * @param team
+     */
+    public void assignTeam(Team team) {
+        // 기존 관계를 제거
+        if (this.team != null) {
+            this.team.getMembers().remove(this);
+        }
+        this.team = team;
+        team.getMembers().add(this);
     }
 }

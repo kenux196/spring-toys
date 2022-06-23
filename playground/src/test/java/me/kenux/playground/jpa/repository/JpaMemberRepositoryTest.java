@@ -31,7 +31,7 @@ class JpaMemberRepositoryTest {
     @Test
     void save() {
         // given
-        Member member = new Member("memberA", 39);
+        Member member = new Member("memberA");
 
         // when
         repository.save(member);
