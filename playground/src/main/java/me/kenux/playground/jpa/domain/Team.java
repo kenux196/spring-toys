@@ -22,7 +22,9 @@ public class Team {
 
     private String name;
 
-    @OneToMany(mappedBy = "team")
+//    @OneToMany(mappedBy = "team")
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID")  // MEMBER 테이블의 TEAM_ID(FK)
     private List<Member> members = new ArrayList<>();
 
     public Team(String name) {

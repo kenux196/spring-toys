@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -42,6 +44,12 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @ManyToMany
+    @JoinTable(name = "member_product",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products = new ArrayList<>();
 
     public Member(String name) {
         this.name = name;

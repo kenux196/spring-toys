@@ -57,7 +57,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("이름에 member가 포함되고 나이가 30이하인 회원 검색: 성공")
+    @DisplayName("이름에 member 포함 회원 검색: 성공")
     void findBySearchCondWithNameAndAge_success() {
         // given
         Member memberA = new Member("memberA");
@@ -74,6 +74,6 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.findAllByCondition(searchCond);
 
         // then
-        assertThat(result).hasSize(2);
+        assertThat(result).hasSize(3);
     }
 }
