@@ -3,6 +3,7 @@ package me.kenux.playground.jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -14,23 +15,26 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
     private Long id;
 
-    @Column(name = "item_id")
-    private Long itemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    @Setter
+    private Item item;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    @Setter
+    private Order order;
 
-    private int price;  // 주문 가격
+    private int orderPrice;
 
-    private int count;  // 주문 수량
+    private int count;
 
-    public OrderItem(Long itemId, Long orderId, int price, int count) {
-        this.itemId = itemId;
-        this.orderId = orderId;
-        this.price = price;
+    public OrderItem(Item item, Order order, int orderPrice, int count) {
+        this.item = item;
+        this.order = order;
+        this.orderPrice = orderPrice;
         this.count = count;
     }
 }

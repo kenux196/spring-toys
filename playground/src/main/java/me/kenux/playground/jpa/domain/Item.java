@@ -1,37 +1,36 @@
 package me.kenux.playground.jpa.domain;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dtype")
 @Getter
-@ToString
-public class Item {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
     private Long id;
 
     private String name;
+    private int price;
+    private int stockQuantity;
 
-    private Integer price;
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 
-    private Integer quantity; // 재고수량
-
-    public Item(Long id, String name, Integer price, Integer quantity) {
-        this.id = id;
+    public Item(String name, int price, int stockQuantity, List<Category> categories) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
-    }
-
-    public Item(String name, Integer price, Integer quantity) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+        this.stockQuantity = stockQuantity;
+        this.categories = categories;
     }
 }

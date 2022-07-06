@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -18,18 +19,41 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date orderDate;  // 주문 날짜
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
+    private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status; // 주문 상태
+    private Status status;
 
-    public Order(Long memberId, Date orderDate, OrderStatus status) {
-        this.memberId = memberId;
-        this.orderDate = orderDate;
-        this.status = status;
+    public Order(List<OrderItem> orderItems, Delivery delivery) {
+        this.orderItems = orderItems;
+        this.delivery = delivery;
+        this.status = Status.ORDER;
+        this.orderDate = LocalDateTime.now();
+    }
+
+    public void assignMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
     }
 }
