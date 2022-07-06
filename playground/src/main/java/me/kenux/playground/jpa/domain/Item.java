@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "item")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item {
