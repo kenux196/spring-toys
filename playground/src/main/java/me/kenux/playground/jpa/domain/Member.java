@@ -24,7 +24,7 @@ public class Member {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "member")
     private final List<Order> orders = new ArrayList<>();
 
     public Member(String name, Address address) {
