@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -40,7 +41,18 @@ class MemberRepositoryTest {
         assertThat(findMembers).hasSize(50);
     }
 
+    @Test
+    @DisplayName("회원 이름으로 검색")
+    void findByName() {
+        // when
+        List<Member> members = memberRepository.findAllByName("회원1");
+
+        // then
+        assertThat(members).hasSize(1);
+    }
+
     private void prepareTestData() {
+
         List<Member> members = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             String city = i % 2 == 0 ? "대구" : "서울";

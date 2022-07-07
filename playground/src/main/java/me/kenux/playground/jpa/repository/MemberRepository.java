@@ -10,4 +10,6 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m where m.address.city = :city")
     List<Member> findAllByCity(@Param("city") String city);
+
+    List<Member> findAllByName(String name);
 }
