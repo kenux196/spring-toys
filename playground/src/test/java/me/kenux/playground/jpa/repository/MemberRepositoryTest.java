@@ -2,9 +2,9 @@ package me.kenux.playground.jpa.repository;
 
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -26,14 +25,17 @@ class MemberRepositoryTest {
     @Autowired
     private EntityManager em;
 
-    @BeforeEach
-    void beforeEach() {
-        prepareTestData();
-    }
+//    @BeforeEach
+//    void beforeEach() {
+//        prepareTestData();
+//    }
 
     @Test
     @DisplayName("거주 도시가 대구인 회원 검색")
     void findByCity() {
+        // given
+        prepareTestData();
+
         // when
         List<Member> findMembers = memberRepository.findAllByCity("대구");
 
@@ -44,11 +46,21 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("회원 이름으로 검색")
     void findByName() {
+        // given
+        prepareTestData();
+
         // when
         List<Member> members = memberRepository.findAllByName("회원1");
 
         // then
         assertThat(members).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("Repository 는 AOP 동적 프록시 객체이다.")
+    void dynamicProxy() {
+        System.out.println("memberRepository = " + memberRepository.getClass());
+        assertThat(AopUtils.isAopProxy(memberRepository)).isTrue();
     }
 
     private void prepareTestData() {
