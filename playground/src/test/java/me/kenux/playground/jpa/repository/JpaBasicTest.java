@@ -10,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @DataJpaTest
 class JpaBasicTest {
@@ -66,8 +68,9 @@ class JpaBasicTest {
         final Optional<Team> findTeam = teamRepository.findById(team.getId());
         findTeam.ifPresent(team1 -> {
             System.out.println("team1 = " + team1.getClass());
-            final List<Member> members = team1.getMembers();
-            for (Member member1 : members) {
+            final List<Member> members1 = team1.getMembers();
+//            Set<Member> members1 = team1.getMembers();
+            for (Member member1 : members1) {
                 System.out.println("member1 = " + member1.getClass());
             }
         });
@@ -133,7 +136,36 @@ class JpaBasicTest {
         for (Member member : members) {
             System.out.println("member = " + member.getName());
         }
+    }
 
+    @Test
+    @DisplayName("N+1 문제 - 중복 이슈")
+    void duplication() {
+        createMember();
+
+        System.out.println("==================================================");
+        List<Team> allTeamWithMembers = teamRepository.findAllTeamWithMembers();
+        allTeamWithMembers.forEach(team -> {
+            System.out.println("team = " + team.getName());
+            team.getMembers().forEach(member -> {
+                System.out.println("    member.getName() = " + member.getName());
+            });
+        });
+    }
+
+    @Test
+    @DisplayName("N+1 문제 - 중복 이슈 해결 - distinct 사용")
+    void duplication_solved() {
+        createMember();
+
+        System.out.println("==================================================");
+        List<Team> allTeamWithMembers = teamRepository.findAllTeamWithMembersUsingDistinct();
+        allTeamWithMembers.forEach(team -> {
+            System.out.println("team = " + team.getName());
+            team.getMembers().forEach(member -> {
+                System.out.println("    member.getName() = " + member.getName());
+            });
+        });
     }
 
     private void prepareNPlusOneIssueData() {
@@ -145,6 +177,33 @@ class JpaBasicTest {
             member.joinTeam(team);
             memberRepository.save(member);
         }
+
+        em.flush();
+        em.clear();
+    }
+
+    private List<Team> createTeam() {
+        List<Team> teams = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Team team = new Team("team " + i);
+            teams.add(team);
+        }
+        teamRepository.saveAll(teams);
+        return teams;
+    }
+
+    private void createMember() {
+        List<Team> teams = createTeam();
+        List<Member> members = new ArrayList<>();
+        Address address = new Address("서울", "도로", "1");
+        for (Team team : teams) {
+            for (int i = 0; i < 5; i++) {
+                Member member = new Member("member " + i, address);
+                member.joinTeam(team);
+                members.add(member);
+            }
+        }
+        memberRepository.saveAll(members);
 
         em.flush();
         em.clear();
