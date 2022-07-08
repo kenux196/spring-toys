@@ -2,6 +2,7 @@ package me.kenux.playground.jpa.repository;
 
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
+import me.kenux.playground.jpa.domain.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;

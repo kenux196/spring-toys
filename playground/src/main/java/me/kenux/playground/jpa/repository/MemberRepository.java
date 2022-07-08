@@ -12,4 +12,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllByCity(@Param("city") String city);
 
     List<Member> findAllByName(String name);
+
+    @Query("select m from Member m " +
+            "join Team t on m.team.id = t.id " +
+            "where t.id = :teamId")
+    List<Member> findAllByTeamId(@Param("teamId") Long teamId);
+
+    @Query("select m from Member m join fetch m.team")
+    List<Member> findAllWithFetchJoin();
 }
