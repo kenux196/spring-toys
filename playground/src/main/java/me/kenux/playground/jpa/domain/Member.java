@@ -3,8 +3,10 @@ package me.kenux.playground.jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,28 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private final List<Order> orders = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    public void joinTeam(Team team) {
+        if (team == null) {
+            throw new InvalidParameterException("팀 설정에 null 값이 입력되었습니다.");
+        }
+        if (this.team != null) {
+            this.team.getMembers().remove(this);
+        }
+        this.team = team;
+        team.getMembers().add(this);
+    }
+
+    public void removeTeam() {
+        if (this.team != null) {
+            this.team.getMembers().remove(this);
+            this.team = null;
+        }
+    }
 
     public Member(String name, Address address) {
         this.name = name;
