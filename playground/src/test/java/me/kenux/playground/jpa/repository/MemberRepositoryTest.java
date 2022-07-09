@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -57,6 +58,16 @@ class MemberRepositoryTest {
     void dynamicProxy() {
         System.out.println("memberRepository = " + memberRepository.getClass());
         assertThat(AopUtils.isAopProxy(memberRepository)).isTrue();
+    }
+
+    @Test
+    @DisplayName("name 속성 uniq 테스트")
+    void isUniqNameColumn() {
+        prepareTestData();
+
+        Member member = new Member("회원1", new Address());
+        assertThatThrownBy(() -> memberRepository.save(member))
+                .isInstanceOf(Exception.class);
     }
 
     private void prepareTestData() {
