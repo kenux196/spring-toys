@@ -26,11 +26,6 @@ class MemberRepositoryTest {
     @Autowired
     private EntityManager em;
 
-//    @BeforeEach
-//    void beforeEach() {
-//        prepareTestData();
-//    }
-
     @Test
     @DisplayName("거주 도시가 대구인 회원 검색")
     void findByCity() {

@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateTimeTest {
 
     @Test
-    void toStirng() {
+    void localDateTimeTest() {
         LocalDateTime time = LocalDateTime.now();
         final String s = time.toString();
         System.out.println("s = " + s);

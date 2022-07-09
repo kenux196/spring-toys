@@ -58,6 +58,4 @@ class BasicJpaTest {
         em.persist(member);
         return member;
     }
-
-
 }
