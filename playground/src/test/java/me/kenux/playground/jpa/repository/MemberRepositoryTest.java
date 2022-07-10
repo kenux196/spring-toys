@@ -1,14 +1,18 @@
 package me.kenux.playground.jpa.repository;
 
+import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
-import me.kenux.playground.jpa.domain.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
+@Import(QuerydslConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest {
 
@@ -68,6 +73,20 @@ class MemberRepositoryTest {
         Member member = new Member("회원1", new Address());
         assertThatThrownBy(() -> memberRepository.save(member))
                 .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    @DisplayName("paging 테스트")
+    void paging() {
+        prepareTestData();
+
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "name"));
+
+        Page<Member> page = memberRepository.findAll(pageRequest);
+
+        System.out.println("page.getTotalPages() = " + page.getTotalPages());
+        List<Member> content = page.getContent();
+        System.out.println("content= " + content);
     }
 
     private void prepareTestData() {
