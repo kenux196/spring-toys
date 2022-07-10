@@ -5,7 +5,6 @@ import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Import(QuerydslConfig.class)
@@ -34,11 +32,6 @@ class MemberServiceTest {
 
     private static final int ALL_MEMBER_COUNT = 10;
 
-    @BeforeEach
-    void beforeEach() {
-        generateTestData();
-    }
-
     @AfterEach
     void afterEach() {
         memberRepository.deleteAll();
@@ -47,7 +40,13 @@ class MemberServiceTest {
     @Test
     @DisplayName("전체 회원 조회")
     void getMembers() {
+        // given
+        generateTestData();
+
+        // when
         List<Member> members = memberService.getMembers();
+
+        // then
         assertThat(members).hasSize(ALL_MEMBER_COUNT);
     }
 
@@ -56,6 +55,7 @@ class MemberServiceTest {
     void joinMemberFailed() {
         // given
         Member member = new Member("회원1", new Address("대구", "도로", "123123"));
+        memberRepository.save(member);
 
         // when then
         assertThatThrownBy(() -> memberService.join(member))
@@ -80,11 +80,14 @@ class MemberServiceTest {
     @DisplayName("회원 1명 조회 성공")
     void getMemberSuccess() {
         // given
-        Long id = memberRepository.findAll().get(0).getId();
+        Member member = new Member("회원1", new Address());
+        memberRepository.save(member);
 
         // when
-        Member member = memberService.getMember(id);
-        assertThat(member.getId()).isEqualTo(id);
+        Member findMember = memberService.getMember(member.getId());
+
+        // then
+        assertThat(findMember.getId()).isNotNull();
     }
 
     @Test
@@ -93,6 +96,7 @@ class MemberServiceTest {
         // given
         Long id = 0L;
 
+        // when then
         assertThatThrownBy(() -> memberService.getMember(id))
                 .isInstanceOf(NoSuchElementException.class);
     }
