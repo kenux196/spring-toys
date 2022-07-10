@@ -1,7 +1,7 @@
 package me.kenux.playground.jpa.domain;
 
 
-public enum Status {
+public enum OrderStatus {
     ORDER,
     CANCEL
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "delivery")
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
 
@@ -19,7 +19,6 @@ public class Delivery {
     private Long id;
 
     @OneToOne(mappedBy = "delivery")
-    @Setter
     private Order order;
 
     @Embedded
@@ -28,8 +27,7 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
-    public Delivery(Order order, Address address) {
-        this.order = order;
+    public Delivery(Address address) {
         this.address = address;
         this.status = DeliveryStatus.READY;
     }
