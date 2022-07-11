@@ -51,6 +51,19 @@ class BasicJpaTest {
 
     }
 
+    @Test
+    @DisplayName("이벤트 리스너 테스트")
+    void eventListenerTest() throws Exception {
+        Duck duck = new Duck("귀여운 오리");
+        em.persist(duck);
+        em.flush();
+        em.clear();
+
+        Duck findDuck = em.find(Duck.class, duck.getId());
+
+        em.remove(findDuck);
+        em.flush();
+    }
 
     private Member getTestMember() {
         Address address = new Address("대구", "대실역남로", "333");
