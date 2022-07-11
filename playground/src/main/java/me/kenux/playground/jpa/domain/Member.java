@@ -55,6 +55,10 @@ public class Member {
         }
     }
 
+    public Member(String name) {
+        this.name = name;
+    }
+
     public Member(String name, Address address) {
         this.name = name;
         this.address = address;

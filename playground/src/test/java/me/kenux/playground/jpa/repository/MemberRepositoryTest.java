@@ -1,5 +1,6 @@
 package me.kenux.playground.jpa.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
@@ -21,6 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 @DataJpaTest
 @Import(QuerydslConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -89,6 +91,39 @@ class MemberRepositoryTest {
         System.out.println("content= " + content);
     }
 
+    @Test
+    @DisplayName("1만 건 save() 시간 테스트")
+    void save_10000() {
+        final List<Member> members = createMember(10000);
+        final long startTime = System.currentTimeMillis();
+        for (Member member : members) {
+            memberRepository.save(member);
+        }
+        log.info("1만건 save 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    @DisplayName("1만 건에 대한 saveAll 시간 테스트")
+    void saveAll_10000() throws Exception {
+        // given
+        final List<Member> members = createMember(10000);
+        final long startTime = System.currentTimeMillis();
+
+        // when
+        memberRepository.saveAll(members);
+
+        // then
+        log.info("1만건 saveAll() 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
+    private List<Member> createMember(int size) {
+        List<Member> members = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            members.add(new Member("member" + i));
+        }
+        return members;
+    }
+
     private void prepareTestData() {
 
         List<Member> members = new ArrayList<>();
@@ -98,6 +133,6 @@ class MemberRepositoryTest {
             Member member = new Member("회원" + i, address);
             members.add(member);
         }
-        memberRepository.saveAllAndFlush(members);
+        memberRepository.saveAllAndFlush(members);;
     }
 }
