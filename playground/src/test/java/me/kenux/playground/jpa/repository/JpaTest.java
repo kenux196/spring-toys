@@ -4,6 +4,7 @@ import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.service.JpaMemberService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,6 +27,7 @@ class JpaTest {
     JpaMemberService memberService;
 
     @Test
+    @DisplayName("다른 영속성 컨텍스트의 엔티티 비교 시, 동일성 비교는 실패한다. 동등성 비교를 해야 한다.")
     void join() {
         // given
         Member member = new Member("member1");
