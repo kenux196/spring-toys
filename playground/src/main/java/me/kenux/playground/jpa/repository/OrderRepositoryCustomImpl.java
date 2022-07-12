@@ -5,14 +5,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.kenux.playground.jpa.domain.Order;
 import me.kenux.playground.jpa.repository.dto.OrderSearchCond;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static me.kenux.playground.jpa.domain.QOrder.order;
 
-@Repository
 @RequiredArgsConstructor
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
