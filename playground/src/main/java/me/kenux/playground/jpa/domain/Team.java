@@ -23,7 +23,6 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<Member> members = new ArrayList<>();
-//    private Set<Member> members = new LinkedHashSet<>();
 
     public Team(String name) {
         this.name = name;
