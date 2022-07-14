@@ -5,18 +5,16 @@ import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.domain.Project;
 import me.kenux.playground.jpa.service.JpaMemberService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -30,7 +28,9 @@ class JpaTest {
     @Autowired
     EntityManager em;
     @Autowired
-    JpaMemberRepository memberRepository;
+    JpaMemberRepository jpaMemberRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired
     JpaMemberService memberService;
 
@@ -47,7 +47,7 @@ class JpaTest {
 
         // then
         // Participating in existing transaction => 트랜잭션 전파.
-        Member findMember = memberRepository.findOne(saveId);
+        Member findMember = jpaMemberRepository.findOne(saveId);
         log.info("======= repository find one end ======");
         // findMember 는 준영속 상태
 
@@ -67,7 +67,7 @@ class JpaTest {
         log.info("======= service join end ======");
 
         // then
-        Member findMember = memberRepository.findOne(saveId);
+        Member findMember = jpaMemberRepository.findOne(saveId);
         log.info("======= repository find one end ======");
         // findMember 는 준영속 상태
 
@@ -159,6 +159,57 @@ class JpaTest {
             }
         }
     }
+
+    @Test
+    @DisplayName("save vs saveAll - save time")
+    void save() {
+        final long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            final Member member = new Member("member" + i);
+            memberRepository.save(member);
+        }
+        log.info("save 소요 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    @DisplayName("save vs saveAll - save time")
+    @Transactional
+    void save2() {
+        final long startTime = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            final Member member = new Member("member" + i);
+            memberRepository.save(member);
+        }
+        log.info("save 소요 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    @DisplayName("save vs saveAll - saveAll Time")
+    void saveAll() {
+        final long startTime = System.currentTimeMillis();
+        List<Member> members = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            final Member member = new Member("member" + i);
+            members.add(member);
+        }
+        memberRepository.saveAll(members);
+        log.info("save 소요 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
+    @Test
+    @DisplayName("save vs saveAll - saveAll Time")
+    @Transactional
+    void saveAll2() {
+        final long startTime = System.currentTimeMillis();
+        List<Member> members = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            final Member member = new Member("member" + i);
+            members.add(member);
+        }
+        memberRepository.saveAll(members);
+        log.info("save 소요 시간 = {}", System.currentTimeMillis() - startTime);
+    }
+
 
     @Test
     @DisplayName("수정 배치 처리 - 페이징 이용")
