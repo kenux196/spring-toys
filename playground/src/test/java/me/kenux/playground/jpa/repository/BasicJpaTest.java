@@ -1,6 +1,6 @@
 package me.kenux.playground.jpa.repository;
 
-import me.kenux.playground.config.QuerydslConfig;
+import me.kenux.playground.jpa.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

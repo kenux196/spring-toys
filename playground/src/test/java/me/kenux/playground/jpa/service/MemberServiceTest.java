@@ -1,6 +1,6 @@
 package me.kenux.playground.jpa.service;
 
-import me.kenux.playground.config.QuerydslConfig;
+import me.kenux.playground.jpa.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.repository.MemberRepository;

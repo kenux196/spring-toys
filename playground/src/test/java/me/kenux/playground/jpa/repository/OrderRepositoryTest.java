@@ -1,18 +1,13 @@
 package me.kenux.playground.jpa.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kenux.playground.config.QuerydslConfig;
+import me.kenux.playground.jpa.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @DataJpaTest

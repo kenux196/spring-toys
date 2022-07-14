@@ -1,4 +1,4 @@
-package me.kenux.playground.config;
+package me.kenux.playground.jpa.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

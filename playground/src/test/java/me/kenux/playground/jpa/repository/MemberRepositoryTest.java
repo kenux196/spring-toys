@@ -1,7 +1,7 @@
 package me.kenux.playground.jpa.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kenux.playground.config.QuerydslConfig;
+import me.kenux.playground.jpa.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
 import org.junit.jupiter.api.DisplayName;
