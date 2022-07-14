@@ -3,6 +3,7 @@ package me.kenux.playground.jpa.repository;
 import lombok.extern.slf4j.Slf4j;
 import me.kenux.playground.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Member;
+import me.kenux.playground.jpa.domain.Project;
 import me.kenux.playground.jpa.service.JpaMemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -136,5 +140,77 @@ class JpaTest {
         Member refMember = em.getReference(Member.class, saveMember.getId());
 
         assertThat(newMember.equals(refMember)).isTrue();
+    }
+
+    @Test
+    @DisplayName("등록 배치 - 끊어가기")
+    @Transactional
+    void batchInsert() {
+        for (int i = 0; i < 10000; i++) {
+            final Member member = new Member("member" + i);
+            log.info("영속화 1 ~ {}", i);
+            em.persist(member);
+            log.info("영속화 2 ~ {}", i);
+
+            if (i % 100 == 0) {
+                log.info("100건씩 DB로 반영하고, 영속성 컨텍스트 초기화 현재 건수 = {}", i);
+                em.flush();
+                em.clear();
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("수정 배치 처리 - 페이징 이용")
+    @Transactional
+    void batchUpdate() {
+        // given
+        for (int i = 0; i < 10000; i++) {
+            final Member member = new Member("member" + i);
+            em.persist(member);
+        }
+        em.flush();
+        em.clear();
+
+        // when
+        int pageSize = 100;
+        for (int i = 0; i < 10; i++) {
+            final List<Member> resultList = em.createQuery("select m from Member m", Member.class)
+                .setFirstResult(i * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList();
+
+            // 비즈니스 로직 실행
+            for (Member member : resultList) {
+                member.changeAge(10);
+            }
+            em.flush();
+            em.clear();
+        }
+    }
+
+    @Test
+    @DisplayName("쓰기 지연 테스트1 - Id 생성 전략이 identity 아닌 경우만 해당된다.")
+    @Transactional
+    void lazyWrite() {
+        for (int i = 0; i < 100; i++) {
+            final Project project = new Project("project" + i);
+            log.info("등록 ");
+            em.persist(project);
+        }
+        log.info("============== flush =====================");
+        em.flush();
+        //em.clear();
+
+        final List<Project> projectList = em.createQuery("select p from Project p", Project.class)
+            .getResultList();
+
+        log.info(" ============ 이름 변경 ====================");
+        for (Project project : projectList) {
+            log.info("이름 변경 중");
+            project.changeName("ppp");
+        }
+        log.info(" ============= 이름 변경 완료 ====================");
+        em.flush();
     }
 }

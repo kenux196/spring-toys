@@ -66,6 +66,10 @@ public class Member {
         this.address = address;
     }
 
+    public void changeAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
