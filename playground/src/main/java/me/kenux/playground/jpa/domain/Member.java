@@ -39,6 +39,10 @@ public class Member {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     public void joinTeam(Team team) {
         if (team == null) {
             throw new InvalidParameterException("팀 설정에 null 값이 입력되었습니다.");
@@ -55,6 +59,11 @@ public class Member {
             this.team.getMembers().remove(this);
             this.team = null;
         }
+    }
+
+
+    public void joinCompany(Company company) {
+        this.company = company;
     }
 
     public Member(String name) {

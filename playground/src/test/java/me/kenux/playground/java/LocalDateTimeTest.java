@@ -28,4 +28,12 @@ public class LocalDateTimeTest {
         final String formattedDateTimeString = time.format(dateTimeFormatter);
         System.out.println("formattedDateTimeString = " + formattedDateTimeString);
     }
+
+
+    @Test
+    void test2() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime messageDateTime = LocalDateTime.parse("2022-07-20 17:20:38.234", formatter);
+        System.out.println("messageDateTime = " + messageDateTime);
+    }
 }
