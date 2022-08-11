@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 @Slf4j
@@ -84,6 +85,19 @@ class DateTimeTest {
         LocalDateTime localDateTime = LocalDateTime.of(2022, 8, 10, 19, 20, 20);
         final OffsetDateTime offsetDateTime1 = OffsetDateTime.of(localDateTime, ZoneOffset.of("+2"));
         System.out.println("offsetDateTime1 = " + offsetDateTime1);
+    }
+
+    @Test
+    void ConvertLocalTimeTest() {
+        setTimeZoneUtc();
+        final OffsetDateTime utc = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.UTC);
+        System.out.println("utc = " + utc);
+
+        final OffsetDateTime kst = utc.withOffsetSameInstant(ZoneOffset.of("+9"));
+        System.out.println("kst = " + kst);
+
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss");
+        System.out.println("kst = " + dateTimeFormatter.format(kst));
     }
 
 
