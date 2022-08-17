@@ -1,13 +1,14 @@
 package me.kenux.playground.jpa.domain;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 //@EqualsAndHashCode
 public class Member {
@@ -32,8 +35,8 @@ public class Member {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member")
-    private final List<Order> orders = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private final List<Order> orders = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
@@ -42,6 +45,15 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @CreatedDate
+    private LocalDateTime localCreatedDate;
+
+    @CreatedDate
+    private OffsetDateTime offsetCreatedDate;
+
+    @CreatedDate
+    private ZonedDateTime zonedCreatedDate;
 
     public void joinTeam(Team team) {
         if (team == null) {

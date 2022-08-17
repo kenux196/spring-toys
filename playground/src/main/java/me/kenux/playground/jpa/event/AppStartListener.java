@@ -24,7 +24,7 @@ public class AppStartListener implements ApplicationListener<ApplicationStartedE
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
-        initMemberData();
+//        initMemberData();
     }
 
     private void initMemberData() {
