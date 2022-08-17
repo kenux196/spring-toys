@@ -25,12 +25,10 @@ public class MemberController {
     public ResponseEntity<?> join(@RequestBody CreateMemberRequest request) {
 
         log.info("requestTime={}", request.getCreatedDate());
-
         final LocalDateTime now = request.getCreatedDate().toLocalDateTime();
-//        final OffsetDateTime off = OffsetDateTime.of(now, ZoneOffset.ofHours(9));
         final ZonedDateTime zone = request.getCreatedDate().toZonedDateTime();
         final Member member = Member.builder()
-            .name("timeTest")
+            .name(request.getName())
             .localCreatedDate(now)
             .offsetCreatedDate(request.getCreatedDate())
             .zonedCreatedDate(zone)

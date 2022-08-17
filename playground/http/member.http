@@ -1,0 +1,14 @@
+###
+POST http://localhost:8080/members
+Content-Type: application/json
+
+{
+    "name": "test1",
+    "createdDate": "2022-08-17T22:00:00+09:00"
+}
+
+###
+GET http://localhost:8080/members/1
+
+###
+GET http://localhost:8080/members
