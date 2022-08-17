@@ -26,13 +26,13 @@ public class MemberController {
 
         log.info("requestTime={}", request.getCreatedDate());
 
-        final LocalDateTime now = LocalDateTime.now();
-        final OffsetDateTime off = OffsetDateTime.of(now, ZoneOffset.ofHours(9));
-        final ZonedDateTime zone = ZonedDateTime.of(now, ZoneId.of("Asia/Seoul"));
+        final LocalDateTime now = request.getCreatedDate().toLocalDateTime();
+//        final OffsetDateTime off = OffsetDateTime.of(now, ZoneOffset.ofHours(9));
+        final ZonedDateTime zone = request.getCreatedDate().toZonedDateTime();
         final Member member = Member.builder()
             .name("timeTest")
             .localCreatedDate(now)
-            .offsetCreatedDate(off)
+            .offsetCreatedDate(request.getCreatedDate())
             .zonedCreatedDate(zone)
             .build();
         final Long id = memberService.join(member);
