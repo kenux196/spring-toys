@@ -25,10 +25,10 @@ class MessageTest {
 
     @Test
     void executeMessage() {
-        final String enterEn = messageSource.getMessage("common.enter", null, Locale.ENGLISH);
-        final String enterKo = messageSource.getMessage("common.enter", null, Locale.KOREAN);
-        assertThat(enterEn).isEqualTo("Enter");
-        assertThat(enterKo).isEqualTo("확인");
+        final String enterEn = messageSource.getMessage("hello", null, Locale.ENGLISH);
+        final String enterKo = messageSource.getMessage("hello", null, Locale.KOREAN);
+        assertThat(enterEn).isEqualTo("hello");
+        assertThat(enterKo).isEqualTo("안녕");
         log.info("en_US : {}", enterEn);
         log.info("ko_KR : {}", enterKo);
     }
