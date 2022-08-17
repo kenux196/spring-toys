@@ -4,11 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneOffsetTransition;
+import java.util.Set;
 import java.util.TimeZone;
 
 @Slf4j
@@ -98,6 +97,17 @@ class DateTimeTest {
 
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss");
         System.out.println("kst = " + dateTimeFormatter.format(kst));
+    }
+
+    @Test
+    void OffsetTest() {
+        setTimeZoneUtc();
+        final Set<String> availableZoneIds = ZoneOffset.getAvailableZoneIds();
+        for (String availableZoneId : availableZoneIds) {
+            System.out.println("availableZoneId = " + availableZoneId + " Offset");
+            System.out.println("TimeZone.getTimeZone(availableZoneId) = " +
+                TimeZone.getTimeZone(availableZoneId));
+        }
     }
 
 

@@ -1,17 +1,17 @@
-spring:
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/h2dbs/test
-    username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+#spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:tcp://localhost/~/h2dbs/test
+#    username: sa
+#    password:
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#    database-platform: org.hibernate.dialect.H2Dialect
 
 logging:
   level:
