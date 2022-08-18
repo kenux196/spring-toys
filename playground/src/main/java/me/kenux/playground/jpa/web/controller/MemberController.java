@@ -6,6 +6,7 @@ import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.service.MemberService;
 import me.kenux.playground.jpa.web.dto.CreateMemberRequest;
 import me.kenux.playground.jpa.web.dto.MemberBasicResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class MemberController {
     public ResponseEntity<?> join(@RequestBody CreateMemberRequest request) {
 
         log.info("requestTime={}", request.getCreatedDate());
+        log.info("requestTime.ZoneOffset={}", request.getCreatedDate().getOffset());
         final LocalDateTime now = request.getCreatedDate().toLocalDateTime();
         final ZonedDateTime zone = request.getCreatedDate().toZonedDateTime();
         final Member member = Member.builder()
@@ -43,6 +45,13 @@ public class MemberController {
             .map(MemberBasicResponse::new)
             .collect(Collectors.toList());
         return ResponseEntity.ok(memberBasicResponses);
+    }
+
+    @GetMapping("/time")
+    public ResponseEntity<?> getTime(@ModelAttribute CreateMemberRequest request) {
+//        log.info("requestTime={}", request.getLocalDateTime());
+//        log.info("requestTime.ZoneOffset={}", request.getCreatedDate().getOffset());
+        return ResponseEntity.ok(request);
     }
 
     @GetMapping("/{id}")

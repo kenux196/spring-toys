@@ -12,3 +12,10 @@ GET http://localhost:8080/members/1
 
 ###
 GET http://localhost:8080/members
+
+###
+GET http://localhost:8080/members/time?name=kenux&createdDate=2022-08-17T22:00:00%2B09:00
+
+
+###
+GET http://localhost:8080/members/time?name=kenux&localDateTime=2022-08-17T22:00:00%2B09:00
