@@ -22,12 +22,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compileOnly 'org.project-lombok:lombok'
-	annotationProcessor 'org.project-lombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	testImplementation 'org.project-lombok:lombok'
-	testAnnotationProcessor 'org.project-lombok:lombok'
+	testImplementation 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.h2database:h2'
 
