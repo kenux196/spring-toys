@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @Import(QuerydslConfig.class)
-//@Transactional
+@Transactional
 class JpaTest {
 
     @Autowired

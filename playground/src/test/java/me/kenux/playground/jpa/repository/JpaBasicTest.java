@@ -1,5 +1,6 @@
 package me.kenux.playground.jpa.repository;
 
+import me.kenux.playground.jpa.config.QuerydslConfig;
 import me.kenux.playground.jpa.domain.Address;
 import me.kenux.playground.jpa.domain.Member;
 import me.kenux.playground.jpa.domain.Team;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -16,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @DataJpaTest
+@Import(QuerydslConfig.class)
 class JpaBasicTest {
 
     @Autowired
@@ -74,7 +77,7 @@ class JpaBasicTest {
                 System.out.println("member1 = " + member1.getClass());
             }
         });
-        
+
         em.clear();
 
         final List<Member> allByTeamId = memberRepository.findAllByTeamId(team.getId());
