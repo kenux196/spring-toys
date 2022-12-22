@@ -1,12 +1,15 @@
 package me.kenux.springsecurity.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -20,8 +23,11 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -71,7 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-                .deleteCookies("remember-me", "JSESSIONID")
+                .deleteCookies("remember-me", "JSESSIONID");
+        http
+                .rememberMe()   // remember-me 기능 사용
+                .alwaysRemember(false)  // remember-me 기능이 활성화되지 않아도 항상 실행. => false 사용 권장
+                .tokenValiditySeconds(3600) // remember me 토큰 유효 기간 설정 => default 14일
+                .rememberMeParameter("remember") // 기본 파라미터명 : remember-me
+                .userDetailsService(userDetailsService)
         ;
     }
 }
