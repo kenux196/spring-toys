@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,14 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
+        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         save(new Member("kenux", "1234", Role.USER));
         save(new Member("admin", "1234", Role.ADMIN));
+        save(new Member("user", "1111", Role.USER));
     }
 
     public Member save(Member member) {

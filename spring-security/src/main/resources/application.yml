@@ -1,9 +1,23 @@
-
 spring:
+  profiles:
+    active: study
+
+---
+spring:
+  config:
+    activate:
+      on-profile: study
   security:
     user:
-      password: password
+      name: user
+      password: 1111
+---
+spring:
+  config:
+    activate:
+      on-profile: test
 
+---
 logging:
   level:
     root: info

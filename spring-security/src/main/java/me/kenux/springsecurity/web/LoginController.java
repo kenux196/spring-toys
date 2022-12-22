@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login() {
-        log.debug("Get /login");
-        return "login";
-    }
+//    @GetMapping("/login")
+//    public String login() {
+//        log.debug("Get /login");
+//        return "login";
+//    }
+//
+////    @ResponseBody
+//    @PostMapping("/login")
+//    public String loggedIn() {
+//        log.debug("POST /login");
+//        return "redirect:/";
+//    }
 
-//    @ResponseBody
-    @PostMapping("/login")
-    public String loggedIn() {
-        log.debug("POST /login");
-        return "redirect:/";
-    }
-
-    @GetMapping("/")
-    public String welcome(Model model) {
-        log.debug("Get /");
-
-        String name = authentication().getName();
-        String roles = authentication().getAuthorities().toString();
-        log.debug("name = {}, roles = {}", name, roles);
-        model.addAttribute("user", new UserResponse(name, roles));
-        return "index";
-    }
+//    @GetMapping("/")
+//    public String welcome(Model model) {
+//        log.debug("Get /");
+//
+//        String name = authentication().getName();
+//        String roles = authentication().getAuthorities().toString();
+//        log.debug("name = {}, roles = {}", name, roles);
+//        model.addAttribute("user", new UserResponse(name, roles));
+//        return "index";
+//    }
 
     private Authentication authentication() {
         return SecurityContextHolder.getContext().getAuthentication();

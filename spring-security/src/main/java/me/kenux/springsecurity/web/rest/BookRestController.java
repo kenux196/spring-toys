@@ -1,4 +1,4 @@
-package me.kenux.springsecurity.rest;
+package me.kenux.springsecurity.web.rest;
 
 import lombok.RequiredArgsConstructor;
 import me.kenux.springsecurity.domain.book.Book;
