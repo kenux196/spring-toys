@@ -83,7 +83,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .alwaysRemember(false)  // remember-me 기능이 활성화되지 않아도 항상 실행. => false 사용 권장
                 .tokenValiditySeconds(3600) // remember me 토큰 유효 기간 설정 => default 14일
                 .rememberMeParameter("remember") // 기본 파라미터명 : remember-me
-                .userDetailsService(userDetailsService)
+                .userDetailsService(userDetailsService);
+
+        // 동시 세션 제어 설정
+        http
+                .sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false);
+        http
+                .sessionManagement()
+                .sessionFixation().changeSessionId();
         ;
     }
 }
