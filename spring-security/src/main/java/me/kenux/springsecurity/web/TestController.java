@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @Secured({"ROLE_ADMIN"})
-    @GetMapping("/admin")
+//    @Secured({"ROLE_ADMIN"})
+//    @GetMapping("/admin")
     public SecurityMessage admin() {
         return SecurityMessage.builder()
                 .message("admin page")
@@ -18,8 +18,8 @@ public class TestController {
                 .build();
     }
 
-    @Secured({"ROLE_USER"})
-    @GetMapping("/user")
+//    @Secured({"ROLE_USER"})
+//    @GetMapping("/user")
     public SecurityMessage user() {
         return SecurityMessage.builder()
                 .message("user page")
